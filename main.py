@@ -8,7 +8,7 @@ import mediapipe as mp
 from PIL.ImageDraw import ImageDraw
 from matplotlib import image
 
-from DRAWER.drawer import Drawer
+import drawer
 
 
 class VISION:
@@ -58,8 +58,9 @@ class VISION:
 
                     draw.draw_landmarks(CAMERAIMG, handLms, mp.solutions.hands.HAND_CONNECTIONS)  # Рисуем ладонь
 
-
+            #F48
             if FINGER4 != FINGER8 and abs(FINGER4[0]-FINGER8[0])<20 and abs(FINGER4[1]-FINGER8[1])<20:
+                #F48 + window moving
                 if abs(FINGER4[0] in range(RX1, RX2) and abs(FINGER4[1] in range(RY1, RY2))):
                     F4P = FINGER4
                 else:
@@ -69,14 +70,18 @@ class VISION:
                     RX2 = RX1 + 100
                     RY2 = RY1 + 100
 
-
+            #FPS
             ctime = time.time()
-
             cv2.putText(CAMERAIMG, f'FPS:{int(1/(ctime-ptime))}', (10, 15), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0))
             ptime = ctime
 
+            #DRAW
+
             CAMERAIMG = cv2.rectangle(CAMERAIMG, (RX1, RY1), (RX2, RY2), (0, 255, 0), 2)
 
+
+            # CAMERAIMG = cv2.GaussianBlur(CAMERAIMG, , )
+            CAMERAIMG = drawer.drawer().rounded_rectangle(CAMERAIMG, (25, 190), (50, 290), (0, 128, 255), 1, 10)
 
 
             cv2.imshow("camera", CAMERAIMG)
@@ -90,7 +95,6 @@ class VISION:
 
 if __name__ == '__main__':
     vision = VISION()
-
 
 
 
